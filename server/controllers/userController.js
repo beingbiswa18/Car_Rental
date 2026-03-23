@@ -23,8 +23,8 @@ export const registerUser= async(req,res)=>{
             return res.json({success:false,message:'User already exists'})
         }
 
-        const hashedPassword = await bcypt.hash(password, 10)
-        const user = await User.create({name,email,password,hashedPassword})
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const user = await User.create({name,email,password:hashedPassword})
 
         const token=generateToken(user._id.toString())
         res.json({success:true,token})
@@ -63,4 +63,16 @@ export const loginUser=async (req,res)=>{
         console.log(error.message);
         res.json({success:false,message:error.message})
     }
+}
+
+//Get user data using token(jwt)
+export const getUserData= async(req,res)=>{
+     try {
+        const {user}=req;
+        res.json({success:true, user})
+     } catch (error) {
+        console.log(error.message);
+        res.json({success:false,message:error.message})
+     }
+
 }
